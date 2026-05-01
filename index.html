@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ФК Стерх — Челябинская лига | Школа №129</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0a2f2f 0%, #051a1a 100%);
+            font-family: 'Segoe UI', 'Poppins', 'Roboto', system-ui, sans-serif;
+            color: #f0f5f0;
+            line-height: 1.4;
+        }
+
+        /* лёгкий узор под фон */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20% 35%, rgba(70, 180, 160, 0.08) 2%, transparent 2.5%),
+                              repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px, transparent 2px, transparent 10px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* шапка */
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.8rem 1rem;
+            background: rgba(0, 25, 20, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 60px;
+            border: 1px solid rgba(80, 200, 180, 0.5);
+            box-shadow: 0 20px 30px -12px black;
+        }
+
+        .club-name {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #B2F0E4, #62D9C2, #C9FFB2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .badge {
+            display: inline-flex;
+            gap: 0.8rem;
+            background: #0a2e2acc;
+            padding: 0.5rem 1.5rem;
+            border-radius: 60px;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .badge span {
+            background: #00000050;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-left: 2px solid #5FDDC4;
+        }
+
+        .stadium-addr {
+            margin-top: 1rem;
+            font-size: 1rem;
+            background: #00000060;
+            display: inline-block;
+            padding: 0.4rem 1.6rem;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
+        }
+
+        .section {
+            background: rgba(6, 30, 26, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2.2rem;
+            border: 1px solid rgba(100, 210, 180, 0.4);
+        }
+
+        .section-title {
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            border-left: 6px solid #5FDDC4;
+            padding-left: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* поле */
+        .pitch {
+            background: linear-gradient(145deg, #1A5C4A, #0F4033);
+            border-radius: 3rem;
+            padding: 1.2rem;
+            border: 3px solid #C6FFE4;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 1px 4px rgba(200,255,220,0.5);
+            margin-top: 0.5rem;
+        }
+
+        .formation-name {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: #00000070;
+            display: inline-block;
+            width: 100%;
+            padding: 0.3rem;
+            border-radius: 60px;
+            margin-bottom: 1.2rem;
+        }
+
+        .line {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 1.2rem 0;
+            gap: 1rem 0.5rem;
+        }
+
+        .player-card {
+            background: #17382E;
+            width: 105px;
+            padding: 8px 5px;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 0 4px 8px black;
+            border-bottom: 3px solid #6EE7CE;
+        }
+
+        .player-card strong {
+            font-size: 0.9rem;
+            display: block;
+            color: #E2FFFA;
+        }
+
+        .player-number {
+            font-weight: 800;
+            font-size: 1rem;
+            background: #2ABFA2;
+            display: inline-block;
+            width: 28px;
+            border-radius: 30px;
+            margin-bottom: 4px;
+            color: #05201a;
+        }
+
+        .player-role {
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        .squad-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .squad-table th, .squad-table td {
+            padding: 12px 6px;
+            text-align: left;
+            border-bottom: 1px solid #9AE6D450;
+        }
+
+        .squad-table th {
+            background: #1F4A40;
+            color: #D9FFF2;
+        }
+
+        .role-tag {
+            background: #2F6C5B;
+            padding: 4px 10px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .role-captain {
+            background: #D99E2B;
+            color: #1e2a00;
+        }
+
+        .max-card {
+            background: linear-gradient(115deg, #0A2F26, #0F3D31);
+            border-radius: 2rem;
+            padding: 1.2rem 1.8rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .max-link {
+            background: #1F4A3A;
+            padding: 0.6rem 1.3rem;
+            border-radius: 3rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: #E0FFEE;
+            border: 1px solid #4BD4B8;
+            word-break: break-all;
+            font-size: 0.85rem;
+        }
+
+        .max-link:hover {
+            background: #36C2A6;
+            color: #071f1a;
+        }
+
+        .no-matches {
+            background: #0F332A;
+            border-radius: 2rem;
+            padding: 1.2rem;
+            text-align: center;
+            border: 1px dashed #6EE7CE;
+        }
+
+        .info-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .info-card {
+            background: #0A2A22;
+            padding: 1rem 1.2rem;
+            border-radius: 1.5rem;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            border-top: 1px solid #6EE7CE60;
+            padding-top: 1.5rem;
+        }
+
+        @media (max-width: 750px) {
+            .container {
+                padding: 1rem;
+            }
+            .club-name {
+                font-size: 2.5rem;
+            }
+            .player-card {
+                width: 85px;
+                padding: 5px 3px;
+            }
+            .player-card strong {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <h1 class="club-name">ФК «СТЕРХ»</h1>
+        <div class="badge">
+            <span>🏆 Челябинская лига</span>
+            <span>📚 Школа №129</span>
+            <span>⚡ Сезон 25/26</span>
+        </div>
+        <div class="stadium-addr">
+            📍 МБОУ СОШ №129 • ул. Салавата Юлаева, 25 корпус А, Челябинск
+        </div>
+    </div>
+
+    <!-- Блок: матчей нет -->
+    <div class="no-matches">
+        <h3>⏳ НА ДАННЫЙ МОМЕНТ МАТЧЕЙ НЕТ</h3>
+        <p>Сезон <strong>2025/2026</strong> стартует совсем скоро! Ждём первый тур, следите за анонсами в MAX-канале.</p>
+        <p style="margin-top: 8px;">❄️ «Стерх» набирает высоту — удачи команде! ❄️</p>
+    </div>
+
+    <!-- РАССТАНОВКА НА ПОЛЕ (4-3-3) -->
+    <div class="section">
+        <div class="section-title">
+            🟢 Игровая схема • 4-3-3
+        </div>
+        <div class="pitch">
+            <div class="formation-name">⚡ СТАРТОВЫЙ СОСТАВ ⚡</div>
+
+            <!-- Вратарь -->
+            <div class="line" style="justify-content: center;">
+                <div class="player-card">
+                    <div class="player-number">1</div>
+                    <strong>Аташка Солт</strong>
+                    <div class="player-role">Вратарь (Капитан)</div>
+                </div>
+            </div>
+
+            <!-- Линия защиты -->
+            <div class="line">
+                <div class="player-card">
+                    <div class="player-number">3</div>
+                    <strong>Мустафа</strong>
+                    <div class="player-role">Левый защитник</div>
+                </div>
+                <div class="player-card">
+                    <div class="player-number">5</div>
+                    <strong>Филипп</strong>
+                    <div class="player-role">Центр. защитник</div>
+                </div>
+                <div class="player-card">
+                    <div class="player-number">4</div>
+                    <strong>Вова</strong>
+                    <div class="player-role">Центр. защитник</div>
+                </div>
+                <div class="player-card">
+                    <div class="player-number">2</div>
+                    <strong>Слава</strong>
+                    <div class="player-role">Правый защитник</div>
+                </div>
+            </div>
+
+            <!-- Атакующая линия -->
+            <div class="line">
+                <div class="player-card">
+                    <div class="player-number">7</div>
+                    <strong>Кирилл</strong>
+                    <div class="player-role">Левый вингер</div>
+                </div>
+                <div class="player-card">
+                    <div class="player-number">9</div>
+                    <strong>Яхёбек</strong>
+                    <div class="player-role">Центр. нападающий</div>
+                </div>
+                <div class="player-card">
+                    <div class="player-number">11</div>
+                    <strong>Леонид</strong>
+                    <div class="player-role">Правый вингер</div>
+                </div>
+            </div>
+
+            <div class="formation-name" style="margin-top: 8px; background:#00000080;">🔄 Запасные</div>
+            <div class="line" style="justify-content: center;">
+                <div class="player-card" style="background:#204F40;">
+                    <div class="player-number">12</div>
+                    <strong>Мухаммад Нур</strong>
+                    <div class="player-role">Вратарь (замена)</div>
+                </div>
+            </div>
+            <div style="font-size: 0.7rem; text-align: center; margin-top: 10px; background:#00000050; border-radius: 30px; padding: 5px;">
+                🧤 Капитан — Аташка Солт (номер 1) | Дух и защита «Стерха»
+            </div>
+        </div>
+    </div>
+
+    <!-- ПОЛНЫЙ СОСТАВ С НОМЕРАМИ -->
+    <div class="section">
+        <div class="section-title">
+            📋 Полный состав • номера и роли
+        </div>
+        <div class="table-wrapper">
+            <table class="squad-table">
+                <thead>
+                <tr><th>Позиция</th><th>Номер</th><th>Игрок</th><th>Роль</th></tr>
+                </thead>
+                <tbody>
+                <tr><td>Вратарь</td><td>1</td><td>Аташка Солт</td><td><span class="role-tag role-captain">Капитан, старт</span></td></tr>
+                <tr><td>Вратарь</td><td>12</td><td>Мухаммад Нур</td><td><span class="role-tag">Замена</span></td></tr>
+                <tr><td>Левый защитник</td><td>3</td><td>Мустафа</td><td><span class="role-tag">Старт</span></td></tr>
+                <tr><td>Центр. защитник</td><td>5</td><td>Филипп</td><td><span class="role-tag">Старт</span></td></tr>
+                <tr><td>Центр. защитник</td><td>4</td><td>Вова</td><td><span class="role-tag">Старт</span></td></tr>
+                <tr><td>Правый защитник</td><td>2</td><td>Слава</td><td><span class="role-tag">Старт</span></td></tr>
+                <tr><td>Левый вингер</td><td>7</td><td>Кирилл</td><td><span class="role-tag">Старт</span></td></tr>
+                <tr><td>Правый вингер</td><td>11</td><td>Леонид</td><td><span class="role-tag">Старт</span></td></tr>
+                <tr><td>Центр. нападающий</td><td>9</td><td>Яхёбек</td><td><span class="role-tag">Старт, тренерский штаб</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="margin-top: 1.2rem; background: #0b2f26; border-radius: 2rem; padding: 0.6rem 1rem; font-size: 0.85rem;">
+            🧤 Тренировки ведёт бывший игрок Академии Футбола — <strong>Яхёбек</strong> (нападающий & тренер)
+        </div>
+    </div>
+
+    <!-- MAX КЛУБ + призыв (без анкеты) -->
+    <div class="section">
+        <div class="section-title">
+            📲 Наш MAX-канал — вся жизнь клуба
+        </div>
+        <div class="max-card">
+            <span style="font-weight: 600;">👥 Присоединяйся к «Стерху» в MAX:</span>
+            <a href="https://max.ru/join/_oU90h9VhfJGNwLY9jTVZG7x-fygJeeerzgrgaMuO8k" target="_blank" rel="noopener noreferrer" class="max-link">
+                MAX / ФК Стерх — ссылка
+            </a>
+            <div style="font-size: 0.85rem; background:#00000055; padding: 0.3rem 1rem; border-radius: 50px;">
+                🔔 Подписывайся!
+            </div>
+        </div>
+        <p style="margin-top: 1rem; padding: 0.5rem; background: #1F4F40; border-radius: 2rem; text-align: center;">
+            ✨ Хочешь играть за «Стерх»? Заполняй анкету в канале MAX ✨<br>
+            (все новости сезона 2025/2026, тренировки и сборы — там!)
+        </p>
+    </div>
+
+    <!-- Инфо о тренере, владельце, стадионе -->
+    <div class="info-grid">
+        <div class="info-card">
+            <div style="font-size: 1.8rem;">👨‍🏫</div>
+            <h3>Тренер</h3>
+            <p><strong>Яхёбек</strong><br>Экс-игрок Академии Футбола</p>
+        </div>
+        <div class="info-card">
+            <div style="font-size: 1.8rem;">👑</div>
+            <h3>Владелец</h3>
+            <p><strong>Солтангулыев Атаджан</strong><br>Основатель и сердце команды</p>
+        </div>
+        <div class="info-card">
+            <div style="font-size: 1.8rem;">🏟️</div>
+            <h3>Стадион</h3>
+            <p>МБОУ СОШ №129<br>Челябинск, ул. Салавата Юлаева 25А</p>
+        </div>
+    </div>
+
+    <footer>
+        ❄️ Футбольный клуб «Стерх» • Челябинская лига • школа 129<br>
+        Сезон 2025/2026 — вперёд, к победам! #СтерхСила
+    </footer>
+</div>
+</body>
+</html>
